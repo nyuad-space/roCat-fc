@@ -1,0 +1,8 @@
+In ~/.platformio/packages/framework-arduinoststm32/boards.txt add:
+
+GenF4.menu.pnum.ROCAT_F767=RoCat Board F767
+GenF4.menu.pnum.ROCAT_F767.upload.maximum_size=2097152
+GenF4.menu.pnum.ROCAT_F767.upload.maximum_data_size=524288
+GenF4.menu.pnum.ROCAT_F767.build.board=ROCAT_F767
+GenF4.menu.pnum.ROCAT_F767.build.product_line=STM32F767xx
+GenF4.menu.pnum.ROCAT_F767.build.variant=ROCAT_F767
