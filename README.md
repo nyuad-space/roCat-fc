@@ -29,8 +29,8 @@ Managed by PlatformIO:
     Buzzer - arduinogetstarted/ezBuzzer@^1.0.0
     Current - adafruit/Adafruit INA219@^1.2.1
     Flash - lowpowerlab/SPIFlash@^101.1.3
-    GNSS - sparkfun/SparkFun u-blox GNSS Arduino Library@^2.2.22
-    LoRa - lowpowerlab/RFM69@^1.5.2
+    GNSS - sparkfun/SparkFun u-blox GNSS Arduino Library@^2.2.22       
+    LoRa(RFM69) - lowpowerlab/RFM69@^1.5.2 >>> LoRa(RFM95) - jgromes/RadioLib@^6.0.0
     PWM - robtillaart/PCA9634@^0.2.7
     SD - adafruit/SD@0.0.0-alpha+sha.041f788250
     Scheduler - arkhipenko/TaskScheduler@^3.7.0
