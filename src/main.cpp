@@ -1,7 +1,11 @@
+#include "config.h"
+
 void setup() {
-  // put your setup code here, to run once:
+  LED.begin();
+  LED.show();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  LED.setPixelColor(0, 64, 50, 64);
+  LED.show();
 }
