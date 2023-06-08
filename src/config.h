@@ -10,12 +10,18 @@
 #include <ezBuzzer.h>
 #include <LPS.h>
 #include <BMI088.h>
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h>
+#include <RHGenericSPI.h>
+#include <LoRa.h>
 
 #define RF95_FREQ 915.0
 
-#define RF95_CS 64  // PF11
-#define RF95_INT 70 // PB11
-#define RF95_RST 68 // PF15
+#define RF95_CS PE11
+#define RF95_INT PB11
+#define RF95_RST PF15
+#define RF95_MOSI PE14
+#define RF95_MISO PE13
+#define RF95_SCK PE12
 
 #define LED_PIN PF10      // PF10
 #define NUM_LEDS 1
@@ -27,5 +33,12 @@
 #define HDRM4_DI 2 // PE3
 
 #define BUZZER PD1
+
+#define IMU_GYRO_INT1 PB12
+#define IMU_GYRO_INT2 PD8
+#define IMU_SPI_SCK PB13
+#define IMU_SPI_MISO PB14
+#define IMU_SPI_MOSI PB15
+
 
 #endif
