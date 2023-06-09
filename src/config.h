@@ -4,15 +4,9 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
-#include <RH_RF95.h>
-#include <Adafruit_NeoPixel.h>
-#include <Adafruit_INA219.h>
-#include <ezBuzzer.h>
-#include <LPS.h>
-#include <BMI088.h>
-#include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-#include <RHGenericSPI.h>
-#include <LoRa.h>
+#include <rocat_baro.h>
+#include <rocat_gps.h>
+#include <rocat_imu.h>
 
 #define RF95_FREQ 915.0
 
@@ -33,12 +27,5 @@
 #define HDRM4_DI 2 // PE3
 
 #define BUZZER PD1
-
-#define IMU_GYRO_INT1 PB12
-#define IMU_GYRO_INT2 PD8
-#define IMU_SPI_SCK PB13
-#define IMU_SPI_MISO PB14
-#define IMU_SPI_MOSI PB15
-
 
 #endif
