@@ -28,4 +28,10 @@
 
 #define BUZZER PD1
 
+#define SPIFLASH_JEDEC 0xEF40
+#define SPIFLASH_CS PA4
+#define SPIFLASH_SCK PA5
+#define SPIFLASH_MISO PA6
+#define SPIFLASH_MOSI PA7
+
 #endif

@@ -1,38 +1,43 @@
 #include <config.h>
-#include <Adafruit_LPS2X.h>
-Adafruit_LPS22 barometer;
-SPIClass SPI_BARO;
+#include <Arduino.h>
+#include <SPIFlash.h>
+
+// SPIClass FLASHSPI(SPIFLASH_MOSI, SPIFLASH_MISO, SPIFLASH_SCK);
+SPIFlash flashdriver(PA4, 0xEF60);
 
 void setup()
-{ 
+{
   Serial.begin(115200);
-  //Stop if serial error
-  while(!Serial)
+  
+  while (!Serial)
   {
-    Serial.println("Serial error... Check wires and reload");
-    delay(1);
+    delay (100);
   }
-  //Wait for setups
+  Serial.println("Serial success");
+  
   delay(100);
-  //Barometer setup
-  if (!barometer.begin_SPI(BARO_SPI_CS, BARO_SPI_SCK, BARO_SPI_MISO, BARO_SPI_MOSI))
+
+  flashdriver.wakeup();
+  if(!flashdriver.initialize())
   {
-    Serial.println("Failed to find sensor");
-    while(1) 
-    {
-      delay(1);
-    }
+    Serial.println("SPI FLASH Init Error!");
   }
-  Serial.println("Found sensor!");
+  Serial.println("SPI FLASH Init success");
+  delay(100);
 }
 
 void loop()
 {
-  sensors_event_t temp;
-  sensors_event_t presssure;
-  barometer.getEvent(&presssure, &temp);
-  Serial.print(temp.temperature);
-  Serial.print(",");
-  Serial.println(presssure.pressure);
-  delay(100);
+  Serial.println("Writing to flash");
+  uint32_t counter = 0;
+  flashdriver.chipErase();
+  Serial.print("Done");
+  // uint32_t counter = 520192;
+
+  // while(counter<520192+256){
+  //   Serial.print(flashdriver.readByte(counter), HEX);
+  //   counter++;
+  //   if (counter%16 == 0) Serial.println(); else Serial.print('.');
+  //   }
+  //   Serial.println();
 }
