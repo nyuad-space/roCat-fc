@@ -34,4 +34,16 @@
 #define SPIFLASH_MISO PA6
 #define SPIFLASH_MOSI PA7
 
+#define RF69_FREQ 915.0
+
+#define SPI5_0_RFM69_CS PG9
+// #define SPI5_1_RFM69_CS PE5
+// #define SPI5_2_RFM69_CS PE6
+#define SPI5_RFM69_SCK PF7
+#define SPI5_RFM69_MISO PF8
+#define SPI5_RFM69_MOSI PF9
+
+#define SPI5_RFM69_RST PE10 // B01_D1
+#define SPI5_RFM69_INT PB10 // B01_D2
+
 #endif

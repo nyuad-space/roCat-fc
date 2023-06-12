@@ -1,43 +1,76 @@
-#include <config.h>
 #include <Arduino.h>
-#include <SPIFlash.h>
+#include <SPI.h>
+#include <RH_RF69.h>
 
-// SPIClass FLASHSPI(SPIFLASH_MOSI, SPIFLASH_MISO, SPIFLASH_SCK);
-SPIFlash flashdriver(PA4, 0xEF60);
+#define RF69_FREQ 915.0
+
+#define RFM69_CS PG9
+#define RFM69_INT PB10
+#define RFM69_RST PE10
+
+#define RFM69_SCK PF7
+#define RFM69_MISO PF8
+#define RFM69_MOSI PF9
+
+RH_RF69 rf69(RFM69_CS, RFM69_INT);
 
 void setup()
 {
   Serial.begin(115200);
-  
+  SPI.setSCLK(RFM69_SCK);
+  SPI.setMISO(RFM69_MISO);
+  SPI.setMOSI(RFM69_MOSI);
+
+  pinMode(RFM69_RST, OUTPUT);
+  delay(10);
+  digitalWrite(RFM69_RST, LOW);
+
   while (!Serial)
   {
-    delay (100);
+    Serial.println("Serial Monitor Not Ready!");
+    delay(100);
   }
-  Serial.println("Serial success");
-  
-  delay(100);
+  Serial.println("Serial MOnitor Ready!");
 
-  flashdriver.wakeup();
-  if(!flashdriver.initialize())
+  digitalWrite(RFM69_RST, HIGH);
+  delay(10);
+  digitalWrite(RFM69_RST, LOW);
+  delay(10);
+
+  if(!rf69.init())
   {
-    Serial.println("SPI FLASH Init Error!");
+    Serial.println("Initialization failed!");
+    while(1);
   }
-  Serial.println("SPI FLASH Init success");
-  delay(100);
+  Serial.println("Initialization success");
+
+  if (!rf69.setFrequency(RF69_FREQ))
+  {
+    Serial.println("Set Freqeuency Failed.");
+  }
+  Serial.println("Set Frequency Success");
+
+  rf69.setTxPower(18, true);
+
+  Serial.print("RFM69 radio @"); 
+  Serial.print((int)RF69_FREQ);
+  Serial.println(" MHz");
+
 }
+
+int16_t packetnum = 0;
 
 void loop()
 {
-  Serial.println("Writing to flash");
-  uint32_t counter = 0;
-  flashdriver.chipErase();
-  Serial.print("Done");
-  // uint32_t counter = 520192;
+  delay(1000);
 
-  // while(counter<520192+256){
-  //   Serial.print(flashdriver.readByte(counter), HEX);
-  //   counter++;
-  //   if (counter%16 == 0) Serial.println(); else Serial.print('.');
-  //   }
-  //   Serial.println();
+  char radiopacket [20] = "Hello World #";
+  itoa(packetnum++, radiopacket+13, 10);
+  Serial.print("Sending... ");
+  Serial.println(radiopacket);
+
+  rf69.send((uint8_t *)radiopacket, strlen(radiopacket));
+  rf69.waitPacketSent();
+
+  Serial.println("Sent!");
 }
