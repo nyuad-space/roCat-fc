@@ -55,6 +55,7 @@ bool Transceiver::Callback()
             }
         }
     }
+    return true;
 }
 
 bool Transceiver::OnEnable()
