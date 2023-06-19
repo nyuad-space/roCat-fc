@@ -1,7 +1,6 @@
 #include <rocat_baro.h>
 
-Barometer::Barometer(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
-                                               measurement_delay(measurement_delay),
+Barometer::Barometer(long measurement_delay) : measurement_delay(measurement_delay),
                                                previous_time(0), pressure(-1),
                                                temperature(-1)
 {
@@ -12,16 +11,6 @@ Barometer::Barometer(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREV
 
 Barometer::~Barometer() {}
 
-float Barometer::getTemperature()
-{
-    return this->temperature;
-}
-
-float Barometer::getPressure()
-{
-    return this->pressure;
-}
-
 bool Barometer::measurementReady()
 {
     long current_time = millis();
@@ -31,6 +20,16 @@ bool Barometer::measurementReady()
         return true;
     }
     return false;
+}
+
+float Barometer::getTemperature()
+{
+    return this->temperature;
+}
+
+float Barometer::getPressure()
+{
+    return this->pressure;
 }
 
 bool Barometer::Callback()
@@ -59,7 +58,7 @@ void Barometer::OnDisable()
 {
 }
 
-bool Barometer::checkStatus()
+bool Barometer::CheckStatus()
 {
     return this->driver->begin_SPI(BARO_SPI_CS, &this->SPI_BARO);
 }

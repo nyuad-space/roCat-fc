@@ -3,7 +3,7 @@
 
 #include <SPI.h>
 #include <RH_RF69.h>
-#include <scheduler.h>
+// #include <scheduler.h>
 
 #define LORA_SPI_INT PB10
 #define LORA_SPI_CS PG9
@@ -16,9 +16,9 @@
 #define LORA_FREQ 915.0
 #define PREAMBLE_LEN 8
 
-class Transceiver : public Task
+class Transceiver
 {
-    private:
+private:
     RH_RF69 *LoRa;
     long measurements_delay;
     long previous_time = 0;
@@ -27,18 +27,18 @@ class Transceiver : public Task
     uint16_t offset = 0;
     uint32_t packet_id = 0;
 
-    public:
+public:
     Transceiver(long measurements_delay);
     ~Transceiver();
 
     bool timeElapsed();
     void storeInBuffer(uint8_t *packet, int size);
-    
+
     bool Callback();
     bool OnEnable();
     void OnDisable();
 
-    bool checkStatus();
+    bool CheckStatus();
 };
 
 #endif

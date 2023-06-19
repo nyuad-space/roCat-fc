@@ -3,7 +3,7 @@
 
 #include <SPI.h>
 #include <BMI088.h>
-#include <scheduler.h>
+// #include <scheduler.h>
 
 #define IMU_GYRO_INT1 PB12
 #define IMU_GYRO_INT2 PD8
@@ -18,7 +18,7 @@
 SPIClass IMU_ACCEL = SPIClass(IMU_SPI_MOSI, IMU_SPI_MISO, IMU_SPI_SCK);
 SPIClass IMU_GYRO = SPIClass(IMU_SPI_MOSI, IMU_SPI_MISO, IMU_SPI_SCK);
 
-class IMU : public Task
+class IMU 
 {
 private:
     Bmi088Accel *Acceldriver;
@@ -45,7 +45,7 @@ public:
     bool Callback();
     bool OnEnable();
     void OnDisable();
-    bool checkStatus();
+    bool CheckStatus();
 };
 
 #endif

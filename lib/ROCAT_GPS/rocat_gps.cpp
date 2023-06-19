@@ -1,7 +1,6 @@
 #include <rocat_gps.h>
 
-GPS::GPS(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
-                                   measurement_delay(measurement_delay),
+GPS::GPS(long measurement_delay) : measurement_delay(measurement_delay),
                                    previous_time(0),
                                    altitudeMSL(-1),
                                    latitude(-1),
@@ -12,6 +11,17 @@ GPS::GPS(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &schedul
 }
 
 GPS::~GPS() {}
+
+bool GPS::measurementReady()
+{
+    long current_time = millis();
+    if (current_time - this->previous_time >= this->measurement_delay)
+    {
+        this->previous_time = current_time;
+        return true;
+    }
+    return false;
+}
 
 int32_t GPS::getAltitude()
 {
@@ -33,40 +43,29 @@ uint16_t GPS::getYear()
     return this->year;
 }
 
-uint16_t GPS::getMonth()
+uint8_t GPS::getMonth()
 {
     return this->month;
 }
 
-uint16_t GPS::getDay()
+uint8_t GPS::getDay()
 {
     return this->day;
 }
 
-uint16_t GPS::getHour()
+uint8_t GPS::getHour()
 {
     return this->hour;
 }
 
-uint16_t GPS::getMinute()
+uint8_t GPS::getMinute()
 {
     return this->minute;
 }
 
-uint16_t GPS::getSecond()
+uint8_t GPS::getSecond()
 {
     return this->second;
-}
-
-bool GPS::measurementReady()
-{
-    long current_time = millis();
-    if (current_time - this->previous_time >= this->measurement_delay)
-    {
-        this->previous_time = current_time;
-        return true;
-    }
-    return false;
 }
 
 bool GPS::Callback()
@@ -82,11 +81,17 @@ bool GPS::Callback()
     return false;
 }
 
-void GPS::onDisable()
+bool GPS::OnEnable()
+{
+    this->driver->begin();
+    return true;
+}
+
+void GPS::OnDisable()
 {
 }
 
-bool GPS::checkStatus()
+bool GPS::CheckStatus()
 {
     return this->driver->begin();
 }

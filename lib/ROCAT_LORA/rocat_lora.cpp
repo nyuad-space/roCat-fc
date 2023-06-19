@@ -1,7 +1,6 @@
 #include <rocat_lora.h>
 
-Transceiver::Transceiver(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
-                                                   measurements_delay(measurement_delay),
+Transceiver::Transceiver(long measurement_delay) : measurements_delay(measurement_delay),
                                                    previous_time(0)
 {
     this->LoRa = new RH_RF69(LORA_SPI_CS, LORA_SPI_INT);
@@ -83,8 +82,7 @@ void Transceiver::OnDisable()
     delete this->LoRa;
 }
 
-bool Transceiver::checkStatus()
+bool Transceiver::CheckStatus()
 {
-
     return this->LoRa->init();
 }

@@ -3,13 +3,13 @@
 
 #include <Wire.h>
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-#include <scheduler.h>
+// #include <scheduler.h>
 
+#define GNSS_I2C_RST PD10
 #define GNSS_I2C_SCL PA8
 #define GNSS_I2C_SDA PC9
-#define GNSS_I2C_RST PD10
 
-class GPS : public Task
+class GPS
 {
 private:
     SFE_UBLOX_GNSS *driver;
@@ -36,16 +36,16 @@ public:
     int32_t getLongitude();
 
     uint16_t getYear();
-    uint16_t getMonth();
-    uint16_t getDay();
-    uint16_t getHour();
-    uint16_t getMinute();
-    uint16_t getSecond();
+    uint8_t getMonth();
+    uint8_t getDay();
+    uint8_t getHour();
+    uint8_t getMinute();
+    uint8_t getSecond();
 
     bool Callback();
-    bool onEnable();
-    void onDisable();
-    bool checkStatus();
+    bool OnEnable();
+    void OnDisable();
+    bool CheckStatus();
 };
 
 #endif
