@@ -1,15 +1,15 @@
 #ifndef ROCAT_GPS
 #define ROCAT_GPS
 
+#include <rocat_scheduler.h>
 #include <Wire.h>
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-// #include <scheduler.h>
 
 #define GNSS_I2C_RST PD10
 #define GNSS_I2C_SCL PA8
 #define GNSS_I2C_SDA PC9
 
-class GPS
+class GPS : public Task
 {
 private:
     SFE_UBLOX_GNSS *driver;

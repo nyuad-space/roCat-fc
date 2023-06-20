@@ -2,5 +2,5 @@
 
 #include <TaskSchedulerDeclarations.h>
 
-//Global object for all modules created in lib
+// Global object for all modules
 extern Scheduler scheduler;

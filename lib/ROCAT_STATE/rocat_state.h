@@ -7,13 +7,10 @@ enum State
     LAUNCH_READY,
     POWERED_FLIGHT,
     UNPOWERED_FLIGHT,
-    PRE_DROUGE,
-    DROUGE,
     POST_DROUGE,
-    MAIN,
     POST_MAIN,
     END,
-    TEST
+    SD_WRITE
 };
 
 extern enum State current_state;

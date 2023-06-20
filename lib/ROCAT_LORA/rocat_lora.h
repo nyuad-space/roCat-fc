@@ -2,8 +2,10 @@
 #define ROCAT_LORA
 
 #include <SPI.h>
+#include <RHSoftwareSPI.h>
 #include <RH_RF69.h>
-// #include <scheduler.h>
+#include <rocat_scheduler.h>
+#include <rocat_state.h>
 
 #define LORA_SPI_INT PB10
 #define LORA_SPI_CS PG9
@@ -16,16 +18,28 @@
 #define LORA_FREQ 915.0
 #define PREAMBLE_LEN 8
 
-class Transceiver
+enum Button
+{
+    NONE,
+    PRELAUNCH_BUTTON,
+    LAUNCH,
+    END_BUTTON,
+    RESET_BUTTON,
+    WRITE_SD
+};
+
+class Transceiver : public Task
 {
 private:
     RH_RF69 *LoRa;
+    RHSoftwareSPI LORA_SPI;
     long measurements_delay;
     long previous_time = 0;
     uint8_t *output_buffer[64];
     uint32_t buffer[RH_RF69_MAX_MESSAGE_LEN];
     uint16_t offset = 0;
     uint32_t packet_id = 0;
+    Button button = NONE;
 
 public:
     Transceiver(long measurements_delay);
@@ -33,6 +47,8 @@ public:
 
     bool timeElapsed();
     void storeInBuffer(uint8_t *packet, int size);
+    Button getButton();
+    void buttonNone();
 
     bool Callback();
     bool OnEnable();

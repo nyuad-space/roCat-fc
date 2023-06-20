@@ -1,12 +1,13 @@
 #include <rocat_baro.h>
 
-Barometer::Barometer(long measurement_delay) : measurement_delay(measurement_delay),
-                                               previous_time(0), pressure(-1),
+Barometer::Barometer(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
+                                               measurement_delay(measurement_delay),
+                                               previous_time(0),
+                                               pressure(-1),
                                                temperature(-1)
 {
-    this->SPI_BARO = SPIClass(BARO_SPI_MOSI, BARO_SPI_MISO, BARO_SPI_SCK);
-    this->SPI_BARO.begin();
     this->driver = new Adafruit_LPS22();
+    driver->begin_SPI(BARO_SPI_CS, BARO_SPI_SCK, BARO_SPI_MISO, BARO_SPI_MOSI);
 }
 
 Barometer::~Barometer() {}
@@ -60,5 +61,5 @@ void Barometer::OnDisable()
 
 bool Barometer::CheckStatus()
 {
-    return this->driver->begin_SPI(BARO_SPI_CS, &this->SPI_BARO);
+    return this->driver->begin_SPI(BARO_SPI_CS, BARO_SPI_SCK, BARO_SPI_MISO, BARO_SPI_MOSI);
 }

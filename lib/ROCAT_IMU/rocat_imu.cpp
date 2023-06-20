@@ -1,6 +1,7 @@
 #include <rocat_imu.h>
 
-IMU::IMU(long measurement_delay) : measurement_delay(measurement_delay)
+IMU::IMU(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
+                                   measurement_delay(measurement_delay)
 {
     this->Acceldriver = new Bmi088Accel(IMU_ACCEL, IMU_SPI_CS_ACCEL);
     this->Gyrodriver = new Bmi088Gyro(IMU_GYRO, IMU_SPI_CS_GYRO);

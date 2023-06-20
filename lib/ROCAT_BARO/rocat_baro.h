@@ -3,7 +3,7 @@
 
 #include <SPI.h>
 #include <Adafruit_LPS2X.h>
-// #include <scheduler.h>
+#include <rocat_scheduler.h>
 
 #define BARO_SPI_CS PG11
 #define BARO_SPI_SCK PG13
@@ -11,12 +11,11 @@
 #define BARO_SPI_MISO PG12
 #define BARO_SPI_INT PG10
 
-class Barometer
+class Barometer : public Task
 {
 private:
     Adafruit_LPS22 *driver;
     Adafruit_Sensor *temp_driver, *pressure_driver;
-    SPIClass SPI_BARO;
     long measurement_delay;
     long previous_time = 0;
     float pressure;

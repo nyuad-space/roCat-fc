@@ -1,9 +1,11 @@
 #include <rocat_lora.h>
 
-Transceiver::Transceiver(long measurement_delay) : measurements_delay(measurement_delay),
+Transceiver::Transceiver(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
+                                                   measurements_delay(measurement_delay),
                                                    previous_time(0)
 {
-    this->LoRa = new RH_RF69(LORA_SPI_CS, LORA_SPI_INT);
+    LORA_SPI.setPins(LORA_SPI_MISO, LORA_SPI_MOSI, LORA_SPI_SCK);
+    this->LoRa = new RH_RF69(LORA_SPI_CS, LORA_SPI_INT, LORA_SPI);
 }
 
 Transceiver::~Transceiver() {}
@@ -24,6 +26,16 @@ void Transceiver::storeInBuffer(uint8_t *packet, int size)
     memcpy(this->output_buffer, packet, size);
 }
 
+Button Transceiver::getButton()
+{
+    return this->button;
+}
+
+void Transceiver::buttonNone()
+{
+    this->button = NONE;
+}
+
 bool Transceiver::Callback()
 {
     long current_time = millis();
@@ -33,11 +45,11 @@ bool Transceiver::Callback()
         if (this->offset == 0)
         {
             char message[RH_RF69_MAX_MESSAGE_LEN];
-            snprintf(message, sizeof(message), "#%.4ld:0\n", this->packet_id);
-            memcpy(message + PREAMBLE_LEN, (char *)this->output_buffer + this->offset, 45);
-            Serial.write(message, 45 + PREAMBLE_LEN);
+            snprintf(message, sizeof(message), "#%.4ld:\n", this->packet_id);
+            memcpy(message + PREAMBLE_LEN, (char *)this->output_buffer + this->offset, 31);
+            Serial.write(message, 31 + PREAMBLE_LEN);
             Serial.println();
-            this->LoRa->send((uint8_t *)message, 45 + PREAMBLE_LEN);
+            this->LoRa->send((uint8_t *)message, 31 + PREAMBLE_LEN);
             this->LoRa->waitPacketSent();
             this->offset = 0;
             this->packet_id++;
@@ -52,6 +64,32 @@ bool Transceiver::Callback()
                 if (!len)
                     return false;
                 Serial.println((char *)buf);
+            }
+
+            if (strcmp((char *)buf, "PRELAUNCH") == 0)
+            {
+                this->button = PRELAUNCH_BUTTON;
+            }
+            else if (strcmp((char *)buf, "LAUNCH") == 0)
+            {
+                this->button = LAUNCH;
+            }
+            else if (strcmp((char *)buf, "END") == 0)
+            {
+                this->button = END_BUTTON;
+            }
+            else if (strcmp((char *)buf, "RESET") == 0)
+            {
+                this->button = RESET_BUTTON;
+                NVIC_SystemReset();
+                Serial.println("Reset!");
+                Serial.println(current_state);
+            }
+            else if (strcmp((char *)buf, "SD_WRITE") == 0)
+            {
+                this->button = WRITE_SD;
+                Serial.println("Writing to SD!");
+                // Execute SD card reading
             }
         }
     }

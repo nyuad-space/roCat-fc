@@ -2,12 +2,12 @@
 #define ROCAT_FLASH_H
 
 #include <SPIFlash.h>
-// #include <scheduler.h>
+#include <rocat_scheduler.h>
 
 #define FIRST_PAGE_OFFSET 256
-#define MAX_DATA_UNITS 131072
+#define MAX_DATA_UNITS 268435456
 
-class Flash
+class Flash : public Task
 {
 private:
     SPIFlash *driver;

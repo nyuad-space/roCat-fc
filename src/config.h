@@ -7,15 +7,32 @@
 
 #include <rocat_gps.h>
 #include <rocat_baro.h>
-#include <rocat_imu.h>
+// #include <rocat_imu.h>
 #include <rocat_lora.h>
 #include <rocat_flash.h>
+#include <rocat_scheduler.h>
 //
-#include <SD.h>
-#include <scheduler.h>
+#include <SD.h> //Need to create custom lib
+// #include <scheduler.h>
+// Mising current sensor, buzzer, led lib/functions
+// Missing state indicaton logic
 
 #define RF95_FREQ 915.0
 
+RHSoftwareSPI LORA_SPI;
+
+#define IMU_GYRO_INT1 PB12
+#define IMU_GYRO_INT2 PD8
+#define IMU_ACCEL_INT1 PD11
+#define IMU_ACCEL_INT2 PD12
+#define IMU_SPI_SCK PB13
+#define IMU_SPI_MISO PB14
+#define IMU_SPI_MOSI PB15
+#define IMU_SPI_CS_ACCEL PD9
+#define IMU_SPI_CS_GYRO PD13
+
+SPIClass IMU_ACCEL = SPIClass(IMU_SPI_MOSI, IMU_SPI_MISO, IMU_SPI_SCK);
+SPIClass IMU_GYRO = SPIClass(IMU_SPI_MOSI, IMU_SPI_MISO, IMU_SPI_SCK);
 // #define RF95_CS PE11
 // #define RF95_INT PB11
 // #define RF95_RST PF15

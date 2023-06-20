@@ -1,6 +1,7 @@
 #include <rocat_gps.h>
 
-GPS::GPS(long measurement_delay) : measurement_delay(measurement_delay),
+GPS::GPS(long measurement_delay) : Task(TASK_MILLISECOND, TASK_FOREVER, &scheduler, false),
+                                   measurement_delay(measurement_delay),
                                    previous_time(0),
                                    altitudeMSL(-1),
                                    latitude(-1),
