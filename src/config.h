@@ -4,22 +4,13 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
-
-#include <rocat_gps.h>
-#include <rocat_baro.h>
 // #include <rocat_imu.h>
-#include <rocat_lora.h>
-#include <rocat_flash.h>
-#include <rocat_scheduler.h>
-//
-#include <SD.h> //Need to create custom lib
+
 // #include <scheduler.h>
 // Mising current sensor, buzzer, led lib/functions
 // Missing state indicaton logic
 
 #define RF95_FREQ 915.0
-
-RHSoftwareSPI LORA_SPI;
 
 #define IMU_GYRO_INT1 PB12
 #define IMU_GYRO_INT2 PD8
