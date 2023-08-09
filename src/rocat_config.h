@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
 
@@ -32,6 +31,10 @@ SPIClass IMU_GYRO = SPIClass(IMU_SPI_MOSI, IMU_SPI_MISO, IMU_SPI_SCK);
 
 #define LED_PIN PF10      // PF10
 #define NUM_LEDS 1
+
+#define GNSS_I2C_SCL PA8
+#define GNSS_I2C_SDA PC9
+#define GNSS_I2C_RST PD10
 
 // #define CUR_I2C_SDA PF0 // PF0
 // #define CUR_I2C_SCL PF1 // PF1
