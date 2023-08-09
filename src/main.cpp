@@ -9,30 +9,28 @@ Adafruit_NeoPixel LED(NUM_LEDS, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 #define BUZZER PD1
 
-// If no default pin for user button (USER_BTN) is defined, define it
-#ifndef USER_BTN
-#define USER_BTN 2
-#endif
 
 // Declare a mutex Semaphore Handle which we will use to manage the Serial Port.
 // It will be used to ensure only only one Task is accessing this resource at any time.
 SemaphoreHandle_t xSerialSemaphore;
 
-// define two Tasks for DigitalRead & AnalogRead
 void TaskBeep( void *pvParameters );
 void TaskBlink( void *pvParemeters);
+void TaskCount( void *pvParemeters);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
 
-  // initialize serial communication at 9600 bits per second:
+  // initialize serial communication:
   Serial.begin(115200);
 
   while (!Serial) {
-    delay(10); // wait for serial port to connect. Needed for native USB, on LEONARDO, MICRO, YUN, and other 32u4 based boards.
+    delay(10); // wait for serial port to connect.
   }
   delay(100);
-  Serial.print(portTICK_PERIOD_MS);
+  Serial.println(portTICK_PERIOD_MS);
+  Serial.println(configTICK_RATE_HZ);
+  Serial.println(F_CPU);
 
   // Semaphores are useful to stop a Task proceeding, where it should be paused to wait,
   // because it is sharing a resource, such as the Serial port.
@@ -56,6 +54,14 @@ void setup() {
   xTaskCreate(
     TaskBlink
     ,  (const portCHAR *)"Blink"  // A name just for humans
+    ,  256  // This stack size can be checked & adjusted by reading the Stack Highwater
+    ,  NULL
+    ,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+    ,  NULL );
+  
+  xTaskCreate(
+    TaskCount
+    ,  (const portCHAR *)"Count"  // A name just for humans
     ,  256  // This stack size can be checked & adjusted by reading the Stack Highwater
     ,  NULL
     ,  2  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
@@ -89,12 +95,12 @@ void TaskBeep( void *pvParameters __attribute__((unused)) )  // This is a Task.
     // If the semaphore is not available, wait 5 ticks of the Scheduler to see if it becomes free.
     if ( xSemaphoreTake( xSerialSemaphore, ( TickType_t ) 5 ) == pdTRUE )
     {
-      Serial.println("Buzzed");
+      //Serial.println("Buzzed");
 
       xSemaphoreGive( xSerialSemaphore ); // Now free or "Give" the Serial Port for others.
     }
 
-    vTaskDelay(500/portTICK_PERIOD_MS);
+    vTaskDelay(5000);
   }
 }
 
@@ -105,20 +111,35 @@ void TaskBlink( void *pvParameters __attribute__((unused)) )  // This is a Task.
   LED.show();
   for (;;) // A Task shall never return or exit.
   {
-    LED.setPixelColor(0, 64, 50, 64);
+    LED.setPixelColor(0, random(50), random(50), random(50));
     LED.show();
-    vTaskDelay(250/portTICK_PERIOD_MS);
+    vTaskDelay(2500);
     // See if we can obtain or "Take" the Serial Semaphore.
     // If the semaphore is not available, wait 5 ticks of the Scheduler to see if it becomes free.
     if ( xSemaphoreTake( xSerialSemaphore, ( TickType_t ) 5 ) == pdTRUE )
     {
-      Serial.println("Blinked");
+      //Serial.println("Blinked");
 
       xSemaphoreGive( xSerialSemaphore ); // Now free or "Give" the Serial Port for others.
     }
-    LED.setPixelColor(0, 255, 255, 255);
+    LED.setPixelColor(0, 0, 0, 0);
     LED.show();
-    vTaskDelay(250/portTICK_PERIOD_MS);
+    vTaskDelay(2500);
   }
 }
 
+void TaskCount( void *pvParameters __attribute__((unused)) )  // This is a Task.
+{
+  unsigned long lastCount = 0;
+  int numTask = 0;
+  for (;;) // A Task shall never return or exit.
+  {
+    if((millis() - lastCount)>=1000){
+      Serial.printf("Tasks run: %u \n", numTask);
+      lastCount = millis();
+      numTask = 0;
+    }
+    numTask++;
+    vTaskDelay(0);
+  }
+}
