@@ -162,7 +162,7 @@ void TaskBlink( void *pvParameters __attribute__((unused)) )  // This is a Task.
   {
     LED.setPixelColor(0, random(50), random(50), random(50));
     LED.show();
-    vTaskDelay(2500/portTICK_PERIOD_MS);
+    vTaskDelay(2500);
     // See if we can obtain or "Take" the Serial Semaphore.
     // If the semaphore is not available, wait 5 ticks of the Scheduler to see if it becomes free.
     if ( xSemaphoreTake( xSerialSemaphore, ( TickType_t ) 5 ) == pdTRUE )
@@ -173,7 +173,7 @@ void TaskBlink( void *pvParameters __attribute__((unused)) )  // This is a Task.
     }
     LED.setPixelColor(0, 0, 0, 0);
     LED.show();
-    vTaskDelay(2500/portTICK_PERIOD_MS);
+    vTaskDelay(2500);
   }
 }
 

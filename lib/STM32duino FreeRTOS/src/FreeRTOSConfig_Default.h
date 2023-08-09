@@ -113,7 +113,7 @@ extern char _Min_Stack_Size; /* Defined in the linker script */
 #define configUSE_IDLE_HOOK               1
 #define configUSE_TICK_HOOK               1
 #define configCPU_CLOCK_HZ                (SystemCoreClock)
-#define configTICK_RATE_HZ                ((TickType_t)1000)
+#define configTICK_RATE_HZ                ((TickType_t)2000)
 #define configMAX_TASK_NAME_LEN           (16)
 #define configUSE_TRACE_FACILITY          1
 #define configUSE_16_BIT_TICKS            0
