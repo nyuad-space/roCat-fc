@@ -22,10 +22,8 @@ void TaskCount( void *pvParemeters);
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-
   // initialize serial communication:
   Serial.begin(115200);
-
   while (!Serial) {
     delay(10); // wait for serial port to connect.
   }
